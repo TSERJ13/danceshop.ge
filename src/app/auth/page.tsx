@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
-import { Send, Lock, Mail, MessageSquare, ShieldCheck, User } from 'lucide-react';
+import { Lock, Mail, MessageSquare } from 'lucide-react';
 
 export default function AuthPage() {
   const router = useRouter();
@@ -15,7 +15,6 @@ export default function AuthPage() {
   const handleEmailAuth = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate auth token saving
     setTimeout(() => {
       const isAdmin = email === 'danceshopge@gmail.com' || email.includes('admin');
       localStorage.setItem('ds_user', JSON.stringify({
@@ -28,7 +27,6 @@ export default function AuthPage() {
     }, 1500);
   };
 
-  // Telegram auth callback simulator
   const handleTelegramMockAuth = () => {
     setIsLoading(true);
     setTimeout(() => {
@@ -46,53 +44,53 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-black text-white">
+    <div className="flex-1 flex flex-col min-h-screen bg-white text-zinc-900">
       <Navigation />
 
       <main className="flex-1 flex items-center justify-center p-4 py-20">
-        <div className="w-full max-w-md rounded border border-gold/30 bg-zinc-950 p-8 space-y-8 shadow-2xl relative overflow-hidden">
+        <div className="w-full max-w-md rounded border border-border-color bg-zinc-50 p-8 space-y-8 shadow-md relative overflow-hidden">
           
           {/* Header */}
           <div className="text-center space-y-2">
-            <span className="text-[10px] font-bold tracking-widest text-gold uppercase">
-              Join DanceShop Club
+            <span className="text-[10px] font-bold tracking-widest text-gold-dark uppercase">
+              Danceshop Club
             </span>
-            <h2 className="text-2xl font-bold tracking-wider">
-              {isRegistering ? 'CREATE AN ACCOUNT' : 'WELCOME BACK'}
+            <h2 className="text-2xl font-bold tracking-wider text-zinc-950">
+              {isRegistering ? 'ახალი ანგარიში' : 'ავტორიზაცია'}
             </h2>
-            <p className="text-zinc-400 text-xs">
-              Secure authentication for professional dancers
+            <p className="text-zinc-500 text-xs">
+              სისტემაში შესვლა პროფესიონალი მოცეკვავეებისთვის
             </p>
           </div>
 
           {/* Email / Password Form */}
           <form onSubmit={handleEmailAuth} className="space-y-4">
             <div className="space-y-1">
-              <label className="text-xs uppercase tracking-wider text-zinc-400 font-semibold">Email Address</label>
+              <label className="text-xs uppercase tracking-wider text-zinc-500 font-semibold">იმეილი</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-zinc-400" />
                 <input
                   type="email"
                   required
                   placeholder="name@domain.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-black border border-border-color rounded text-sm text-white placeholder-zinc-650 focus:border-gold focus:outline-none transition-colors duration-200"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-border-color rounded text-sm text-zinc-900 placeholder-zinc-350 focus:border-gold focus:outline-none transition-colors duration-200"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs uppercase tracking-wider text-zinc-400 font-semibold">Password</label>
+              <label className="text-xs uppercase tracking-wider text-zinc-500 font-semibold">პაროლი</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-zinc-400" />
                 <input
                   type="password"
                   required
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-black border border-border-color rounded text-sm text-white placeholder-zinc-650 focus:border-gold focus:outline-none transition-colors duration-200"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-border-color rounded text-sm text-zinc-900 placeholder-zinc-350 focus:border-gold focus:outline-none transition-colors duration-200"
                 />
               </div>
             </div>
@@ -100,16 +98,16 @@ export default function AuthPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 bg-gradient-to-r from-gold-dark to-gold text-black font-bold uppercase text-xs tracking-widest rounded transition-all duration-200 hover:from-gold hover:to-gold-light disabled:opacity-50"
+              className="w-full py-3 bg-gradient-to-r from-gold-dark to-gold text-white font-bold uppercase text-xs tracking-widest rounded transition-all duration-200 hover:brightness-110 disabled:opacity-50"
             >
-              {isLoading ? 'Processing...' : isRegistering ? 'Register' : 'Sign In'}
+              {isLoading ? 'იტვირთება...' : isRegistering ? 'რეგისტრაცია' : 'შესვლა'}
             </button>
           </form>
 
           {/* Divider */}
           <div className="relative flex py-2 items-center">
             <div className="flex-grow border-t border-border-color"></div>
-            <span className="flex-shrink mx-4 text-zinc-500 text-xs uppercase tracking-wider">or sign in with</span>
+            <span className="flex-shrink mx-4 text-zinc-400 text-xs uppercase tracking-wider">ან</span>
             <div className="flex-grow border-t border-border-color"></div>
           </div>
 
@@ -117,31 +115,28 @@ export default function AuthPage() {
           <div className="space-y-3">
             <button
               onClick={handleTelegramMockAuth}
-              className="w-full py-3 border border-sky-500/30 hover:border-sky-500 bg-sky-950/20 text-sky-400 hover:text-sky-300 font-semibold text-xs tracking-widest uppercase rounded flex items-center justify-center space-x-2 transition-all duration-200"
+              className="w-full py-3 border border-sky-500/30 hover:border-sky-500 bg-sky-50 text-sky-650 font-semibold text-xs tracking-widest uppercase rounded flex items-center justify-center space-x-2 transition-all duration-200"
             >
-              <MessageSquare className="h-4 w-4 fill-sky-400 text-sky-400" />
-              <span>Simulate Telegram Login</span>
+              <MessageSquare className="h-4 w-4 fill-sky-500 text-sky-500" />
+              <span>Telegram-ით შესვლა</span>
             </button>
-            <p className="text-[10px] text-zinc-500 text-center">
-              Telegram Login widget loads natively in production using Telegram OAuth API.
-            </p>
           </div>
 
           {/* Mode Switch */}
           <div className="text-center pt-2">
             <button
               onClick={() => setIsRegistering(!isRegistering)}
-              className="text-xs text-gold hover:text-gold-light transition-colors duration-200"
+              className="text-xs text-gold-dark hover:text-gold transition-colors duration-200 font-bold"
             >
-              {isRegistering ? 'Already have an account? Sign In' : "Don't have an account yet? Register"}
+              {isRegistering ? 'უკვე გაქვთ ანგარიში? შედით' : 'არ გაქვთ ანგარიში? დარეგისტრირდით'}
             </button>
           </div>
 
         </div>
       </main>
 
-      <footer className="bg-black border-t border-border-color py-12 px-4 text-center text-xs text-zinc-500 pb-20 md:pb-12">
-        <p>&copy; {new Date().getFullYear()} DanceShop Georgia. All rights reserved.</p>
+      <footer className="bg-zinc-50 border-t border-border-color py-12 px-4 text-center text-xs text-zinc-500 pb-20 md:pb-12">
+        <p>&copy; {new Date().getFullYear()} DanceShop Georgia. ყველა უფლება დაცულია.</p>
       </footer>
     </div>
   );

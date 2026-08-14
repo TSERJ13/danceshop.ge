@@ -4,7 +4,7 @@ import { useState, useMemo, use } from 'react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { mockProducts, mockCategories } from '@/data/mockData';
-import { Filter, Star, Heart, SlidersHorizontal, ArrowRight, Grid, List } from 'lucide-react';
+import { Filter, Star, Heart, SlidersHorizontal, ArrowRight, Grid } from 'lucide-react';
 
 interface PageProps {
   params: Promise<{
@@ -45,7 +45,6 @@ export default function CategoryPage({ params }: PageProps) {
   // Filtered Products
   const filteredProducts = useMemo(() => {
     return mockProducts.filter((product) => {
-      // Category filter (support simple mapping)
       const matchesCategory =
         activeCategorySlug === 'all' ||
         product.category_slug === activeCategorySlug ||
@@ -70,17 +69,17 @@ export default function CategoryPage({ params }: PageProps) {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-black text-white">
+    <div className="flex-1 flex flex-col min-h-screen bg-white text-zinc-900">
       <Navigation />
 
       {/* Header Banner */}
-      <section className="bg-zinc-950 border-b border-border-color py-12 px-4 text-center">
+      <section className="bg-zinc-50 border-b border-border-color py-12 px-4 text-center">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-wider capitalize">
-            {activeCategory ? activeCategory.name : 'All Collections'}
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-wider capitalize text-zinc-950">
+            {activeCategory ? activeCategory.name : 'სრული კოლექცია'}
           </h1>
-          <p className="text-zinc-400 text-xs mt-2 uppercase tracking-widest">
-            Home / Products {activeCategory ? `/ ${activeCategory.name}` : ''}
+          <p className="text-zinc-500 text-xs mt-2 uppercase tracking-widest font-semibold">
+            მთავარი / პროდუქცია {activeCategory ? `/ ${activeCategory.name}` : ''}
           </p>
         </div>
       </section>
@@ -92,9 +91,9 @@ export default function CategoryPage({ params }: PageProps) {
           {/* Sidebar Filters */}
           <aside className="space-y-8 lg:block">
             <div className="flex items-center justify-between border-b border-border-color pb-4">
-              <h3 className="font-semibold text-lg flex items-center space-x-2">
-                <SlidersHorizontal className="h-4 w-4 text-gold" />
-                <span>Filters</span>
+              <h3 className="font-bold text-base flex items-center space-x-2 text-zinc-900">
+                <SlidersHorizontal className="h-4.5 w-4.5 text-gold" />
+                <span>ფილტრები</span>
               </h3>
               <button
                 onClick={() => {
@@ -102,34 +101,34 @@ export default function CategoryPage({ params }: PageProps) {
                   setSelectedSize('all');
                   setMaxPrice(600);
                 }}
-                className="text-xs text-gold hover:text-gold-light"
+                className="text-xs text-gold font-bold hover:text-gold-light"
               >
-                Clear All
+                გასუფთავება
               </button>
             </div>
 
             {/* Brand Filter */}
             <div className="space-y-3">
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">Brand</h4>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">ბრენდი</h4>
               <div className="space-y-2">
-                <label className="flex items-center space-x-2 text-sm text-zinc-300 cursor-pointer">
+                <label className="flex items-center space-x-2 text-sm text-zinc-700 cursor-pointer">
                   <input
                     type="radio"
                     name="brand"
                     checked={selectedBrand === 'all'}
                     onChange={() => setSelectedBrand('all')}
-                    className="accent-gold h-4 w-4 bg-zinc-900 border-zinc-700"
+                    className="accent-gold h-4 w-4"
                   />
-                  <span>All Brands</span>
+                  <span>ყველა ბრენდი</span>
                 </label>
                 {filterOptions.brands.map((brand) => (
-                  <label key={brand} className="flex items-center space-x-2 text-sm text-zinc-300 cursor-pointer">
+                  <label key={brand} className="flex items-center space-x-2 text-sm text-zinc-700 cursor-pointer">
                     <input
                       type="radio"
                       name="brand"
                       checked={selectedBrand === brand}
                       onChange={() => setSelectedBrand(brand)}
-                      className="accent-gold h-4 w-4 bg-zinc-900 border-zinc-700"
+                      className="accent-gold h-4 w-4"
                     />
                     <span>{brand}</span>
                   </label>
@@ -139,17 +138,17 @@ export default function CategoryPage({ params }: PageProps) {
 
             {/* Size Filter */}
             <div className="space-y-3">
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">Size</h4>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">ზომა</h4>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setSelectedSize('all')}
                   className={`px-3 py-1.5 text-xs rounded border transition-colors duration-200 ${
                     selectedSize === 'all'
-                      ? 'border-gold bg-gold text-black font-semibold'
-                      : 'border-zinc-800 bg-zinc-950 text-zinc-300 hover:border-gold/50'
+                      ? 'border-gold bg-gold text-white font-bold'
+                      : 'border-zinc-200 bg-white text-zinc-700 hover:border-gold/50'
                   }`}
                 >
-                  All
+                  ყველა
                 </button>
                 {filterOptions.sizes.map((size) => (
                   <button
@@ -157,8 +156,8 @@ export default function CategoryPage({ params }: PageProps) {
                     onClick={() => setSelectedSize(size)}
                     className={`px-3 py-1.5 text-xs rounded border transition-colors duration-200 ${
                       selectedSize === size
-                        ? 'border-gold bg-gold text-black font-semibold'
-                        : 'border-zinc-800 bg-zinc-950 text-zinc-300 hover:border-gold/50'
+                        ? 'border-gold bg-gold text-white font-bold'
+                        : 'border-zinc-200 bg-white text-zinc-700 hover:border-gold/50'
                     }`}
                   >
                     {size}
@@ -169,9 +168,9 @@ export default function CategoryPage({ params }: PageProps) {
 
             {/* Price Filter */}
             <div className="space-y-3">
-              <div className="flex justify-between items-center text-sm text-zinc-400">
-                <span className="uppercase tracking-wider">Max Price</span>
-                <span className="text-gold font-bold">${maxPrice}</span>
+              <div className="flex justify-between items-center text-xs font-bold text-zinc-400">
+                <span className="uppercase tracking-wider">მაქს. ფასი</span>
+                <span className="text-gold-dark font-extrabold">${maxPrice}</span>
               </div>
               <input
                 type="range"
@@ -180,7 +179,7 @@ export default function CategoryPage({ params }: PageProps) {
                 step="10"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="w-full accent-gold bg-zinc-850 h-1 rounded-lg cursor-pointer"
+                className="w-full accent-gold bg-zinc-200 h-1.5 rounded-lg cursor-pointer"
               />
             </div>
           </aside>
@@ -188,21 +187,21 @@ export default function CategoryPage({ params }: PageProps) {
           {/* Product Grid Area */}
           <div className="lg:col-span-3 space-y-6">
             <div className="flex items-center justify-between border-b border-border-color pb-4">
-              <p className="text-xs text-zinc-400 uppercase tracking-widest">
-                Showing {filteredProducts.length} results
+              <p className="text-xs text-zinc-500 uppercase tracking-widest font-semibold">
+                ნაპოვნია {filteredProducts.length} პროდუქტი
               </p>
               <div className="flex items-center space-x-2">
-                <button className="p-2 border border-zinc-800 text-gold rounded" disabled>
+                <button className="p-2 border border-zinc-200 text-gold rounded" disabled>
                   <Grid className="h-4 w-4" />
                 </button>
               </div>
             </div>
 
             {filteredProducts.length === 0 ? (
-              <div className="text-center py-20 border border-zinc-850 rounded bg-zinc-950/40">
-                <Filter className="h-12 w-12 text-zinc-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg text-white">No products found</h3>
-                <p className="text-zinc-500 text-sm mt-1">Try resetting filters to view products</p>
+              <div className="text-center py-20 border border-dashed border-zinc-200 rounded bg-zinc-50">
+                <Filter className="h-12 w-12 text-zinc-400 mx-auto mb-4" />
+                <h3 className="font-bold text-lg text-zinc-900">პროდუქტები ვერ მოიძებნა</h3>
+                <p className="text-zinc-500 text-xs mt-1">შეცვალეთ ფილტრის პარამეტრები</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -211,7 +210,7 @@ export default function CategoryPage({ params }: PageProps) {
                   return (
                     <div
                       key={product.id}
-                      className="group relative flex flex-col rounded border border-border-color bg-card-bg overflow-hidden"
+                      className="group relative flex flex-col rounded border border-border-color bg-white overflow-hidden shadow-xs hover:shadow-md transition-shadow duration-300"
                     >
                       <Link
                         href={`/product/${product.id}`}
@@ -222,17 +221,17 @@ export default function CategoryPage({ params }: PageProps) {
                           alt={product.name}
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300" />
+                        <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
                         {product.sale_price && (
-                          <span className="absolute top-4 left-4 bg-gold text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                            Sale
+                          <span className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                            ფასდაკლება
                           </span>
                         )}
                       </Link>
 
                       <button
                         onClick={() => toggleWishlist(product.id)}
-                        className="absolute top-4 right-4 p-2 rounded-full bg-black/70 border border-gold/20 text-white hover:text-gold transition-colors duration-200"
+                        className="absolute top-4 right-4 p-2 rounded-full bg-white/90 border border-zinc-200 text-zinc-500 hover:text-gold transition-colors duration-200 shadow-sm"
                       >
                         <Heart
                           className={`h-4 w-4 ${inWishlist ? 'fill-gold text-gold' : ''}`}
@@ -241,14 +240,14 @@ export default function CategoryPage({ params }: PageProps) {
 
                       <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                         <div>
-                          <div className="flex items-center justify-between text-xs text-zinc-400 mb-1">
-                            <span>{product.brand}</span>
+                          <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-1">
+                            <span className="font-bold uppercase tracking-wider">{product.brand}</span>
                             <div className="flex items-center space-x-1 text-gold">
                               <Star className="h-3.5 w-3.5 fill-gold" />
-                              <span>{product.rating.toFixed(1)}</span>
+                              <span className="font-bold">{product.rating.toFixed(1)}</span>
                             </div>
                           </div>
-                          <h3 className="text-base font-semibold text-white group-hover:text-gold transition-colors duration-200">
+                          <h3 className="text-base font-bold text-zinc-900 group-hover:text-gold transition-colors duration-200">
                             <Link href={`/product/${product.id}`}>{product.name}</Link>
                           </h3>
                         </div>
@@ -257,22 +256,22 @@ export default function CategoryPage({ params }: PageProps) {
                           <div className="flex items-baseline space-x-2">
                             {product.sale_price ? (
                               <>
-                                <span className="text-lg font-bold text-gold">
+                                <span className="text-lg font-bold text-gold-dark">
                                   ${product.sale_price.toFixed(2)}
                                 </span>
-                                <span className="text-xs text-zinc-500 line-through">
+                                <span className="text-xs text-zinc-400 line-through">
                                   ${product.price.toFixed(2)}
                                 </span>
                               </>
                             ) : (
-                              <span className="text-lg font-bold text-white">
+                              <span className="text-lg font-bold text-zinc-950">
                                 ${product.price.toFixed(2)}
                               </span>
                             )}
                           </div>
                           <Link
                             href={`/product/${product.id}`}
-                            className="p-2 border border-gold/30 hover:border-gold hover:bg-gold hover:text-black rounded text-gold transition-all duration-300"
+                            className="p-2 border border-gold/30 hover:border-gold hover:bg-gold hover:text-white rounded text-gold transition-all duration-300"
                           >
                             <ArrowRight className="h-4 w-4" />
                           </Link>
@@ -288,8 +287,8 @@ export default function CategoryPage({ params }: PageProps) {
         </div>
       </main>
 
-      <footer className="bg-black border-t border-border-color py-12 px-4 text-center text-xs text-zinc-500 pb-20 md:pb-12">
-        <p>&copy; {new Date().getFullYear()} DanceShop Georgia. All rights reserved.</p>
+      <footer className="bg-zinc-50 border-t border-border-color py-12 px-4 text-center text-xs text-zinc-500 pb-20 md:pb-12">
+        <p>&copy; {new Date().getFullYear()} DanceShop Georgia. ყველა უფლება დაცულია.</p>
       </footer>
     </div>
   );

@@ -4,7 +4,7 @@ import { useState, useMemo, use } from 'react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { mockProducts, mockSizeCharts } from '@/data/mockData';
-import { Star, ShieldCheck, HelpCircle, Heart, Check, X, ArrowLeft, Ruler } from 'lucide-react';
+import { Star, ShieldCheck, Heart, X, ArrowLeft, Ruler } from 'lucide-react';
 
 interface ProductPageProps {
   params: Promise<{
@@ -83,7 +83,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-black text-white">
+    <div className="flex-1 flex flex-col min-h-screen bg-white text-zinc-900">
       <Navigation />
 
       {/* Detail Area */}
@@ -91,10 +91,10 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
         {/* Back navigation */}
         <Link
           href="/products/all"
-          className="inline-flex items-center text-xs font-semibold uppercase tracking-wider text-gold hover:text-gold-light space-x-2"
+          className="inline-flex items-center text-xs font-bold uppercase tracking-wider text-gold-dark hover:text-gold space-x-2"
         >
           <ArrowLeft className="h-4 w-4" />
-          <span>Back to Catalog</span>
+          <span>უკან კატალოგში</span>
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -103,7 +103,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
           <div className="space-y-4">
             {/* Big image with Zoom capability */}
             <div
-              className="relative aspect-square rounded border border-border-color bg-card-bg overflow-hidden cursor-zoom-in"
+              className="relative aspect-square rounded border border-border-color bg-zinc-50 overflow-hidden cursor-zoom-in shadow-xs"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >
@@ -132,7 +132,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                     key={idx}
                     onClick={() => setActiveImage(img)}
                     className={`h-20 w-20 rounded border overflow-hidden transition-all duration-200 ${
-                      activeImage === img ? 'border-gold' : 'border-border-color hover:border-gold/50'
+                      activeImage === img ? 'border-gold shadow-xs' : 'border-border-color hover:border-gold/50'
                     }`}
                   >
                     <img src={img} alt="" className="h-full w-full object-cover" />
@@ -145,38 +145,38 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
           {/* Right Column: Customization & Sizing */}
           <div className="space-y-8">
             <div className="space-y-2">
-              <span className="text-xs uppercase tracking-widest text-gold font-bold">
+              <span className="text-xs uppercase tracking-widest text-gold-dark font-extrabold">
                 {product.brand}
               </span>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-wide">
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wide text-zinc-950">
                 {product.name}
               </h1>
               
               <div className="flex items-center space-x-4 pt-1">
                 <div className="flex items-center space-x-1 text-gold">
                   <Star className="h-4 w-4 fill-gold" />
-                  <span className="text-sm font-semibold">{product.rating.toFixed(1)}</span>
+                  <span className="text-sm font-bold text-zinc-800">{product.rating.toFixed(1)}</span>
                 </div>
-                <span className="text-zinc-600">|</span>
-                <span className="text-xs uppercase tracking-wider text-green-500 font-semibold">
-                  In stock & ready to ship
+                <span className="text-zinc-300">|</span>
+                <span className="text-xs uppercase tracking-wider text-green-600 font-bold">
+                  მარაგშია & მზადაა გასაგზავნად
                 </span>
               </div>
             </div>
 
             {/* Price display */}
             <div className="flex items-baseline space-x-4">
-              <span className="text-3xl font-extrabold text-white">
+              <span className="text-3xl font-extrabold text-zinc-950">
                 ${finalPrice.toFixed(2)}
               </span>
               {product.sale_price && (
-                <span className="text-zinc-500 line-through text-sm">
+                <span className="text-zinc-400 line-through text-sm">
                   ${(product.price + (matchingVariant?.price_modifier || 0)).toFixed(2)}
                 </span>
               )}
             </div>
 
-            <p className="text-zinc-300 text-sm leading-relaxed">
+            <p className="text-zinc-650 text-sm leading-relaxed font-medium">
               {product.description}
             </p>
 
@@ -185,8 +185,8 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
               
               {/* Color Selection */}
               <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-                  Select Color: <span className="text-white font-medium">{selectedColor}</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                  ფერი: <span className="text-zinc-950 font-bold">{selectedColor}</span>
                 </span>
                 <div className="flex space-x-2">
                   {availableColors.map((color) => (
@@ -195,8 +195,8 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                       onClick={() => setSelectedColor(color)}
                       className={`px-4 py-2 text-xs rounded border transition-all duration-200 ${
                         selectedColor === color
-                          ? 'border-gold bg-gold/10 text-gold font-bold'
-                          : 'border-border-color bg-zinc-950 text-zinc-300 hover:border-gold/50'
+                          ? 'border-gold bg-gold/5 text-gold-dark font-bold shadow-xs'
+                          : 'border-border-color bg-white text-zinc-700 hover:border-gold/50'
                       }`}
                     >
                       {color}
@@ -208,16 +208,16 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
               {/* Size & Size Guide Trigger */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-                    Select Size: <span className="text-white font-medium">{selectedSize}</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                    ზომა: <span className="text-zinc-950 font-bold">{selectedSize}</span>
                   </span>
                   {sizeChart && (
                     <button
                       onClick={() => setSizeModalOpen(true)}
-                      className="inline-flex items-center space-x-1 text-xs text-gold hover:text-gold-light font-semibold"
+                      className="inline-flex items-center space-x-1 text-xs text-gold-dark hover:text-gold font-bold"
                     >
                       <Ruler className="h-3.5 w-3.5" />
-                      <span>Size Guide & Measures</span>
+                      <span>ზომების ცხრილი & გაზომვა</span>
                     </button>
                   )}
                 </div>
@@ -226,10 +226,10 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`h-11 min-w-[2.75rem] px-3 rounded border text-xs font-semibold flex items-center justify-center transition-all duration-200 ${
+                      className={`h-11 min-w-[2.75rem] px-3 rounded border text-xs font-bold flex items-center justify-center transition-all duration-200 ${
                         selectedSize === size
-                          ? 'border-gold bg-gold text-black'
-                          : 'border-border-color bg-zinc-950 text-zinc-300 hover:border-gold/50'
+                          ? 'border-gold bg-gold text-white shadow-xs'
+                          : 'border-border-color bg-white text-zinc-700 hover:border-gold/50'
                       }`}
                     >
                       {size}
@@ -241,8 +241,8 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
               {/* Heel Height Selection (For Shoes) */}
               {availableHeels.length > 0 && (
                 <div className="space-y-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-                    Select Heel Configuration:
+                  <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                    ქუსლის კონფიგურაცია:
                   </span>
                   <div className="flex space-x-2">
                     {availableHeels.map((heel) => (
@@ -251,8 +251,8 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                         onClick={() => setSelectedHeel(heel!)}
                         className={`px-4 py-2 text-xs rounded border transition-all duration-200 ${
                           selectedHeel === heel
-                            ? 'border-gold bg-gold/10 text-gold font-bold'
-                            : 'border-border-color bg-zinc-950 text-zinc-300 hover:border-gold/50'
+                            ? 'border-gold bg-gold/5 text-gold-dark font-bold'
+                            : 'border-border-color bg-white text-zinc-700 hover:border-gold/50'
                         }`}
                       >
                         {heel}
@@ -270,31 +270,31 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                   setAddedToCart(true);
                   setTimeout(() => setAddedToCart(false), 2000);
                 }}
-                className="w-full sm:flex-1 py-4 bg-gradient-to-r from-gold-dark to-gold text-black font-bold uppercase text-xs tracking-widest rounded transition-all duration-200 hover:from-gold hover:to-gold-light active:scale-95"
+                className="w-full sm:flex-1 py-4 bg-gradient-to-r from-gold-dark to-gold text-white font-bold uppercase text-xs tracking-widest rounded transition-all duration-200 hover:brightness-110 active:scale-95"
               >
-                {addedToCart ? 'Added to Cart ✓' : 'Add to Shopping Bag'}
+                {addedToCart ? 'კალათაშია ✓' : 'კალათაში დამატება'}
               </button>
               <button
                 onClick={() => setInWishlist(!inWishlist)}
                 className={`w-full sm:w-auto p-4 rounded border transition-all duration-200 flex items-center justify-center space-x-2 ${
                   inWishlist
-                    ? 'border-gold bg-gold/10 text-gold'
-                    : 'border-border-color bg-transparent text-white hover:text-gold hover:border-gold/50'
+                    ? 'border-gold bg-gold/5 text-gold-dark'
+                    : 'border-border-color bg-transparent text-zinc-650 hover:text-gold hover:border-gold/50'
                 }`}
               >
-                <Heart className={`h-5 w-5 ${inWishlist ? 'fill-gold' : ''}`} />
-                <span className="sm:hidden text-xs uppercase tracking-wider font-semibold">
-                  Wishlist
+                <Heart className={`h-5 w-5 ${inWishlist ? 'fill-gold text-gold-dark' : ''}`} />
+                <span className="sm:hidden text-xs uppercase tracking-wider font-bold">
+                  რჩეულებში შენახვა
                 </span>
               </button>
             </div>
 
             {/* Professional Standards */}
-            <div className="bg-zinc-950/60 border border-border-color rounded p-4 flex items-start space-x-3 text-xs text-zinc-400">
+            <div className="bg-zinc-50 border border-border-color rounded p-4 flex items-start space-x-3 text-xs text-zinc-650">
               <ShieldCheck className="h-5 w-5 text-gold flex-shrink-0" />
               <div>
-                <p className="font-semibold text-white">DanceShop Authenticity Guaranteed</p>
-                <p className="mt-0.5">Every footwear pair is subjected to sizing and weight tests to comply with WDSF safety requirements.</p>
+                <p className="font-bold text-zinc-900">DanceShop-ის ხარისხის გარანტია</p>
+                <p className="mt-0.5">თითოეული მოდელი მოწმდება უშუალოდ მწარმოებლის მიერ საერთაშორისო სტანდარტების შესაბამისად.</p>
               </div>
             </div>
           </div>
@@ -303,19 +303,19 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
 
       {/* Advanced size guide modal */}
       {sizeModalOpen && sizeChart && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-          <div className="relative w-full max-w-4xl rounded border border-gold/30 bg-zinc-950 overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs">
+          <div className="relative w-full max-w-4xl rounded border border-gold/30 bg-white overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-border-color p-6">
               <div className="space-y-1">
-                <h3 className="text-xl font-bold tracking-wide text-white">
+                <h3 className="text-xl font-bold tracking-wide text-zinc-950">
                   {sizeChart.name}
                 </h3>
-                <p className="text-xs text-gold">Sports Sizing Guidelines</p>
+                <p className="text-xs text-gold-dark font-semibold">ზომების შერჩევის წესი</p>
               </div>
               <button
                 onClick={() => setSizeModalOpen(false)}
-                className="p-1 rounded border border-border-color text-zinc-400 hover:text-white"
+                className="p-1 rounded border border-border-color text-zinc-400 hover:text-zinc-600"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -325,25 +325,25 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
             <div className="p-6 overflow-y-auto max-h-[70vh] grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Sizing Grid Table */}
               <div className="space-y-4">
-                <h4 className="text-sm font-bold uppercase tracking-wider text-gold">
-                  Dimensions Reference Grid
+                <h4 className="text-sm font-bold uppercase tracking-wider text-gold-dark">
+                  ზომების შესატყვისობა
                 </h4>
                 <div className="overflow-x-auto border border-border-color rounded">
-                  <table className="min-w-full divide-y divide-zinc-800 text-left text-xs">
-                    <thead className="bg-zinc-900 text-zinc-300">
+                  <table className="min-w-full divide-y divide-zinc-200 text-left text-xs">
+                    <thead className="bg-zinc-50 text-zinc-600">
                       <tr>
                         {sizeChart.headers.map((header) => (
-                          <th key={header} className="px-3 py-3 font-semibold tracking-wider">
+                          <th key={header} className="px-3 py-3 font-bold tracking-wider">
                             {header}
                           </th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-zinc-800 bg-black/40">
+                    <tbody className="divide-y divide-zinc-200 bg-white">
                       {sizeChart.rows.map((row, idx) => (
-                        <tr key={idx} className="hover:bg-zinc-900/30">
+                        <tr key={idx} className="hover:bg-zinc-50/50">
                           {sizeChart.headers.map((header) => (
-                            <td key={header} className="px-3 py-3 text-zinc-300">
+                            <td key={header} className="px-3 py-3 text-zinc-700">
                               {row[header]}
                             </td>
                           ))}
@@ -356,30 +356,30 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
 
               {/* Sizing Instructions / How to Measure guidelines */}
               <div className="space-y-6">
-                <h4 className="text-sm font-bold uppercase tracking-wider text-gold">
-                  How To Measure Correctly
+                <h4 className="text-sm font-bold uppercase tracking-wider text-gold-dark">
+                  როგორ გავზომოთ სწორად
                 </h4>
-                <div className="space-y-4 text-xs text-zinc-300">
+                <div className="space-y-4 text-xs text-zinc-700">
                   {Object.entries(sizeChart.guidelines).map(([name, instruction]) => (
-                    <div key={name} className="border-l-2 border-gold/40 pl-3 py-1 space-y-1">
-                      <span className="font-bold text-white uppercase tracking-wider block">
+                    <div key={name} className="border-l-2 border-gold/60 pl-3 py-1 space-y-1">
+                      <span className="font-bold text-zinc-900 uppercase tracking-wider block">
                         {name}
                       </span>
-                      <p className="leading-relaxed text-zinc-400">{instruction}</p>
+                      <p className="leading-relaxed text-zinc-500 font-medium">{instruction}</p>
                     </div>
                   ))}
                 </div>
 
                 {/* Sizing Visual guidelines stub */}
-                <div className="rounded border border-border-color bg-zinc-900/30 p-4 space-y-2">
-                  <span className="text-[10px] font-bold tracking-widest text-gold uppercase block">
-                    Illustration & Guidelines
+                <div className="rounded border border-border-color bg-zinc-50 p-4 space-y-2">
+                  <span className="text-[10px] font-bold tracking-widest text-gold-dark uppercase block">
+                    ინსტრუქციები მოცეკვავეებისთვის
                   </span>
-                  <div className="border border-dashed border-zinc-700 h-24 rounded flex items-center justify-center text-zinc-500 text-xs">
-                    [ Foot Contour / Body measurement illustration ]
+                  <div className="border border-dashed border-zinc-200 h-24 rounded flex items-center justify-center text-zinc-400 text-xs bg-white">
+                    [ ტერფის / ტანის გაზომვის სქემა ]
                   </div>
-                  <p className="text-[10px] text-zinc-500 text-center">
-                    Keep your foot flat on the floor. Wear the specific sports socks or stockings you intend to wear during dancesport matches.
+                  <p className="text-[10px] text-zinc-500 text-center font-medium">
+                    გაზომვის დროს იდექით სწორად, მყარ ზედაპირზე. გამოიყენეთ ის სპორტული წინდები, რომლითაც აპირებთ ცეკვას.
                   </p>
                 </div>
               </div>
@@ -388,8 +388,8 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
         </div>
       )}
 
-      <footer className="bg-black border-t border-border-color py-12 px-4 text-center text-xs text-zinc-500 pb-20 md:pb-12">
-        <p>&copy; {new Date().getFullYear()} DanceShop Georgia. All rights reserved.</p>
+      <footer className="bg-zinc-50 border-t border-border-color py-12 px-4 text-center text-xs text-zinc-500 pb-20 md:pb-12">
+        <p>&copy; {new Date().getFullYear()} DanceShop Georgia. ყველა უფლება დაცულია.</p>
       </footer>
     </div>
   );

@@ -50,7 +50,7 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.webmanifest" />
       </head>
-      <body className="min-h-full flex flex-col bg-black text-white selection:bg-yellow-500 selection:text-black">
+      <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-yellow-500 selection:text-black">
         <PWARegistration />
         {children}
       </body>
