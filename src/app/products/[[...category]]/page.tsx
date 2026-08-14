@@ -50,27 +50,32 @@ export default function CategoryPage({ params }: PageProps) {
     return mockCategories.filter((c) => c.parent_id === mainCategoryObj.id);
   }, [activeCategorySlug]);
 
-  // Derived filter options based on type
+  // Distinct Filter options: Separate clothing sizes (Height) from shoe sizes (EU)
   const filterOptions = useMemo(() => {
     const brands = new Set<string>();
-    const sizes = new Set<string>();
+    const clothingSizes = new Set<string>();
+    const shoeSizes = new Set<string>();
 
     mockProducts.forEach((p) => {
       if (productTypeFilter !== 'all' && p.product_type !== productTypeFilter) return;
       brands.add(p.brand);
-      p.variants.forEach((v) => sizes.add(v.size));
+
+      p.variants.forEach((v) => {
+        if (p.product_type === 'shoes') {
+          shoeSizes.add(v.size);
+        } else if (p.product_type === 'clothing') {
+          clothingSizes.add(v.size);
+        }
+      });
     });
 
-    const sortedSizes = Array.from(sizes).sort((a, b) => {
-      const numA = parseInt(a);
-      const numB = parseInt(b);
-      if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
-      return a.localeCompare(b);
-    });
+    const sortedShoeSizes = Array.from(shoeSizes).sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0));
+    const sortedClothingSizes = Array.from(clothingSizes).sort((a, b) => a.localeCompare(b));
 
     return {
       brands: Array.from(brands),
-      sizes: sortedSizes,
+      clothingSizes: sortedClothingSizes,
+      shoeSizes: sortedShoeSizes,
     };
   }, [productTypeFilter]);
 
@@ -274,39 +279,70 @@ export default function CategoryPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* Context-aware Size Filter (Height cm vs EU shoe size) */}
-            <div className="space-y-3">
+            {/* Separated Size Filters Logic */}
+            <div className="space-y-6">
+              {/* Reset Size Selection Button */}
               <div className="flex justify-between items-center">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">ზომა</h4>
-                <span className="text-[10px] text-zinc-400 font-semibold">
-                  {productTypeFilter === 'shoes' ? '(EU ზომები 25-45)' : '(სიმაღლე სმ)'}
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => setSelectedSize('all')}
-                  className={`px-3 py-1.5 text-xs rounded-lg border font-bold transition-all ${
-                    selectedSize === 'all'
-                      ? 'border-gold bg-gold text-white shadow-xs'
-                      : 'border-zinc-200 bg-white text-zinc-700 hover:border-gold/50'
-                  }`}
-                >
-                  ყველა
-                </button>
-                {filterOptions.sizes.map((size) => (
+                <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">ზომები</h4>
+                {selectedSize !== 'all' && (
                   <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`px-3 py-1.5 text-xs rounded-lg border font-bold transition-all ${
-                      selectedSize === size
-                        ? 'border-gold bg-gold text-white shadow-xs'
-                        : 'border-zinc-200 bg-white text-zinc-700 hover:border-gold/50'
-                    }`}
+                    onClick={() => setSelectedSize('all')}
+                    className="text-[10px] text-gold-dark font-extrabold hover:underline"
                   >
-                    {size}
+                    ყველა ზომა
                   </button>
-                ))}
+                )}
               </div>
+
+              {/* 👗 Clothing Sizes (Height cm) */}
+              {(productTypeFilter === 'all' || productTypeFilter === 'clothing') && filterOptions.clothingSizes.length > 0 && (
+                <div className="space-y-2 border-l-2 border-amber-400 pl-3">
+                  <span className="text-xs font-extrabold text-zinc-800 flex items-center space-x-1">
+                    <Shirt className="h-3.5 w-3.5 text-gold-dark" />
+                    <span>ტანსაცმლის სიმაღლე (სმ)</span>
+                  </span>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {filterOptions.clothingSizes.map((size) => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(selectedSize === size ? 'all' : size)}
+                        className={`px-2.5 py-1.5 text-xs rounded-lg border font-bold transition-all ${
+                          selectedSize === size
+                            ? 'border-gold bg-gold text-white shadow-xs'
+                            : 'border-zinc-200 bg-white text-zinc-700 hover:border-gold/50'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 👠 Shoe Sizes (EU 25-45) */}
+              {(productTypeFilter === 'all' || productTypeFilter === 'shoes') && filterOptions.shoeSizes.length > 0 && (
+                <div className="space-y-2 border-l-2 border-amber-600 pl-3">
+                  <span className="text-xs font-extrabold text-zinc-800 flex items-center space-x-1">
+                    <Footprints className="h-3.5 w-3.5 text-gold-dark" />
+                    <span>ფეხსაცმლის ზომები (EU)</span>
+                  </span>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {filterOptions.shoeSizes.map((size) => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(selectedSize === size ? 'all' : size)}
+                        className={`px-2.5 py-1.5 text-xs rounded-lg border font-bold transition-all ${
+                          selectedSize === size
+                            ? 'border-gold bg-gold text-white shadow-xs'
+                            : 'border-zinc-200 bg-white text-zinc-700 hover:border-gold/50'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Price Filter */}
