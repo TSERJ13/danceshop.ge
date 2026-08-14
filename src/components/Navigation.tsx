@@ -31,8 +31,9 @@ export default function Navigation() {
       <header className="sticky top-0 z-50 border-b border-border-color bg-black/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold tracking-widest text-white">
+          <Link href="/" className="flex items-center space-x-3">
+            <img src="/logo.png" alt="DanceShop Georgia" className="h-9 w-auto rounded border border-gold/20" />
+            <span className="text-sm font-bold tracking-widest text-white hidden sm:block">
               DANCE<span className="text-gold">SHOP</span>
               <span className="block text-[8px] tracking-[0.25em] text-gold-light">GEORGIA</span>
             </span>
