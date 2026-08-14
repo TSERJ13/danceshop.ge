@@ -21,7 +21,6 @@ export default function Navigation() {
     { name: 'მთავარი', href: '/', icon: Home },
     { name: 'კატალოგი', href: '/products/all', icon: ShoppingBag },
     { name: 'რჩეულები', href: '/dashboard?tab=wishlist', icon: Heart },
-    { name: 'ადმინი', href: '/admin/categories', icon: ShieldAlert },
     { name: 'პროფილი', href: '/auth', icon: User },
   ];
 
@@ -65,13 +64,6 @@ export default function Navigation() {
               className="text-foreground hover:text-gold transition-colors duration-200"
             >
               <User className="h-5 w-5" />
-            </Link>
-            <Link
-              href="/admin/categories"
-              className="text-foreground hover:text-gold transition-colors duration-200"
-              title="ადმინისტრატორი"
-            >
-              <ShieldAlert className="h-5 w-5" />
             </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

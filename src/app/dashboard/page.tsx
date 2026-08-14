@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '@/components/Navigation';
 import { mockProducts } from '@/data/mockData';
-import { Heart, User, LogOut, Trash2, Package } from 'lucide-react';
+import { Heart, User, LogOut, Trash2, Package, ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DashboardPage() {
@@ -125,6 +125,15 @@ export default function DashboardPage() {
               <Package className="h-4 w-4" />
               <span>შეკვეთები</span>
             </button>
+            {user.role === 'admin' && (
+              <Link
+                href="/admin/categories"
+                className="flex items-center space-x-2 px-4 py-3 rounded text-xs uppercase tracking-wider font-bold transition-colors duration-200 whitespace-nowrap border border-gold bg-gold/5 text-gold-dark hover:bg-gold hover:text-white"
+              >
+                <ShieldAlert className="h-4 w-4" />
+                <span>ადმინ პანელი</span>
+              </Link>
+            )}
           </nav>
 
           {/* Details Content Box */}
