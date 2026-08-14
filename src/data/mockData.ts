@@ -43,50 +43,60 @@ export interface Product {
 }
 
 export const mockCategories: Category[] = [
-  { id: 'cat-1', name: 'Women', slug: 'women', parent_id: null },
-  { id: 'cat-2', name: 'Men', slug: 'men', parent_id: null },
-  { id: 'cat-3', name: 'Kids', slug: 'kids', parent_id: null },
-  { id: 'cat-4', name: 'Shoes', slug: 'shoes', parent_id: null },
-  { id: 'cat-5', name: 'Dancewear', slug: 'dancewear', parent_id: null },
+  { id: 'cat-1', name: 'ქალები', slug: 'women', parent_id: null },
+  { id: 'cat-2', name: 'კაცები', slug: 'men', parent_id: null },
+  { id: 'cat-3', name: 'ბავშვები', slug: 'kids', parent_id: null },
+  { id: 'cat-4', name: 'ფეხსაცმელი', slug: 'shoes', parent_id: null },
+  { id: 'cat-5', name: 'ტანსაცმელი', slug: 'dancewear', parent_id: null },
   // Subcategories
-  { id: 'sub-1', name: "Women's Latin", slug: 'womens-latin', parent_id: 'cat-1' },
-  { id: 'sub-2', name: "Men's Standard", slug: 'mens-standard', parent_id: 'cat-2' },
-  { id: 'sub-3', name: "Practice Wear", slug: 'practice', parent_id: 'cat-5' },
+  { id: 'sub-1', name: 'ლათინური კაბები', slug: 'womens-latin', parent_id: 'cat-1' },
+  { id: 'sub-2', name: 'სამეჯლისო პერანგები', slug: 'mens-standard', parent_id: 'cat-2' },
+  { id: 'sub-3', name: 'სავარჯიშო სამოსი', slug: 'practice', parent_id: 'cat-5' },
+  { id: 'sub-4', name: 'საბავშვო რეიტინგული კაბები', slug: 'kids-rating', parent_id: 'cat-3' },
 ];
 
 export const mockSizeCharts: SizeChart[] = [
   {
     id: 'sc-shoes',
-    name: 'Standard Dance Shoes Size Chart',
+    name: 'საცეკვაო ფეხსაცმლის ევროპული ზომები (25 - 45)',
     guidelines: {
-      'Foot Length': 'Place foot on paper, trace outline, measure from back of heel to tip of longest toe.',
-      'Instep': 'Measure around the highest arch of your foot with a soft measuring tape.'
+      'ტერფის სიგრძე (სმ)': 'დადექით ფურცელზე სწორად, შემოხაზეთ ტერფის კონტური და გაზომეთ ქუსლიდან ყველაზე გრძელი თითის წვერამდე.',
+      'სიგანე / მოცულობა': 'გაზომეთ ტერფის ყველაზე ფართო ნაწილი (თითების სახსართან).'
     },
-    headers: ['EU Size', 'UK Size', 'Foot Length (cm)', 'US Women', 'US Men'],
+    headers: ['EU ზომა', 'ტერფის სიგრძე (სმ)', 'კატეგორია', 'რეკომენდებული ქუსლი'],
     rows: [
-      { 'EU Size': '36', 'UK Size': '3.5', 'Foot Length (cm)': '23.0', 'US Women': '5.5', 'US Men': '4.5' },
-      { 'EU Size': '37', 'UK Size': '4.0', 'Foot Length (cm)': '23.5', 'US Women': '6.0', 'US Men': '5.0' },
-      { 'EU Size': '38', 'UK Size': '5.0', 'Foot Length (cm)': '24.5', 'US Women': '7.0', 'US Men': '6.0' },
-      { 'EU Size': '39', 'UK Size': '6.0', 'Foot Length (cm)': '25.5', 'US Women': '8.0', 'US Men': '7.0' },
-      { 'EU Size': '40', 'UK Size': '6.5', 'Foot Length (cm)': '26.0', 'US Women': '8.5', 'US Men': '7.5' },
-      { 'EU Size': '41', 'UK Size': '7.5', 'Foot Length (cm)': '27.0', 'US Women': '9.5', 'US Men': '8.5' },
-      { 'EU Size': '42', 'UK Size': '8.0', 'Foot Length (cm)': '27.5', 'US Women': '10.0', 'US Men': '9.0' },
+      { 'EU ზომა': '25', 'ტერფის სიგრძე (სმ)': '15.5', 'კატეგორია': 'საბავშვო (Juvenile)', 'რეკომენდებული ქუსლი': '3.5 სმ Block' },
+      { 'EU ზომა': '28', 'ტერფის სიგრძე (სმ)': '17.5', 'კატეგორია': 'საბავშვო (Juvenile)', 'რეკომენდებული ქუსლი': '3.5 სმ Block' },
+      { 'EU ზომა': '31', 'ტერფის სიგრძე (სმ)': '19.5', 'კატეგორია': 'საბავშვო (Juvenile)', 'რეკომენდებული ქუსლი': '3.5 სმ Block' },
+      { 'EU ზომა': '34', 'ტერფის სიგრძე (სმ)': '21.5', 'კატეგორია': 'იუნიორები', 'რეკომენდებული ქუსლი': '4.5 სმ Cuban / Slim' },
+      { 'EU ზომა': '36', 'ტერფის სიგრძე (სმ)': '23.0', 'კატეგორია': 'ქალი / იუნიორი', 'რეკომენდებული ქუსლი': '6.5 სმ Slim / Flare' },
+      { 'EU ზომა': '37', 'ტერფის სიგრძე (სმ)': '23.5', 'კატეგორია': 'ქალი / ახალგაზრდა', 'რეკომენდებული ქუსლი': '7.0 სმ Slim' },
+      { 'EU ზომა': '38', 'ტერფის სიგრძე (სმ)': '24.5', 'კატეგორია': 'ქალი / უფროსები', 'რეკომენდებული ქუსლი': '7.5 სმ Slim / Stiletto' },
+      { 'EU ზომა': '39', 'ტერფის სიგრძე (სმ)': '25.0', 'კატეგორია': 'ქალი / უფროსები', 'რეკომენდებული ქუსლი': '7.5 სმ Slim' },
+      { 'EU ზომა': '41', 'ტერფის სიგრძე (სმ)': '26.5', 'კატეგორია': 'კაცი ლათინო/სტანდარტი', 'რეკომენდებული ქუსლი': '2.0 სმ / 4.0 სმ' },
+      { 'EU ზომა': '42', 'ტერფის სიგრძე (სმ)': '27.0', 'კატეგორია': 'კაცი ლათინო/სტანდარტი', 'რეკომენდებული ქუსლი': '2.0 სმ / 4.0 სმ' },
+      { 'EU ზომა': '43', 'ტერფის სიგრძე (სმ)': '27.5', 'კატეგორია': 'კაცი ლათინო/სტანდარტი', 'რეკომენდებული ქუსლი': '2.0 სმ / 4.0 სმ' },
+      { 'EU ზომა': '45', 'ტერფის სიგრძე (სმ)': '29.0', 'კატეგორია': 'კაცი ლათინო/სტანდარტი', 'რეკომენდებული ქუსლი': '2.0 სმ / 4.0 სმ' },
     ]
   },
   {
     id: 'sc-wear',
-    name: 'Premium Dancewear Size Chart',
+    name: 'საცეკვაო ტანსაცმლის ზომები სიმაღლის მიხედვით (110 - 180+ სმ)',
     guidelines: {
-      'Chest/Bust': 'Measure horizontally around the fullest part of the chest.',
-      'Waist': 'Measure around the narrowest part of the natural waistline.',
-      'Hips': 'Measure around the widest part of the seat.'
+      'სიმაღლე (სმ)': 'გაზომეთ სიმაღლე ფეხშიშველად იატაკიდან თავის მწვერვალამდე.',
+      'გულმკერდის გარშემოწერილობა': 'გაზომეთ ჰორიზონტალურად მკერდის ყველაზე გამობურცულ ადგილას.',
+      'წელის გარშემოწერილობა': 'გაზომეთ წელის ყველაზე ვიწრო ადგილას.'
     },
-    headers: ['Label Size', 'Chest (cm)', 'Waist (cm)', 'Hips (cm)'],
+    headers: ['სიმაღლე (სმ)', 'სპორტული კატეგორია', 'გულმკერდი (სმ)', 'წელი (სმ)'],
     rows: [
-      { 'Label Size': 'XS', 'Chest (cm)': '80-84', 'Waist (cm)': '62-66', 'Hips (cm)': '86-90' },
-      { 'Label Size': 'S', 'Chest (cm)': '84-88', 'Waist (cm)': '66-70', 'Hips (cm)': '90-94' },
-      { 'Label Size': 'M', 'Chest (cm)': '88-92', 'Waist (cm)': '70-74', 'Hips (cm)': '94-98' },
-      { 'Label Size': 'L', 'Chest (cm)': '92-96', 'Waist (cm)': '74-78', 'Hips (cm)': '98-102' },
+      { 'სიმაღლე (სმ)': '110-120 სმ', 'სპორტული კატეგორია': 'Juvenile 1 (საბავშვო)', 'გულმკერდი (სმ)': '58-62', 'წელი (სმ)': '52-56' },
+      { 'სიმაღლე (სმ)': '120-130 სმ', 'სპორტული კატეგორია': 'Juvenile 2 (საბავშვო)', 'გულმკერდი (სმ)': '62-66', 'წელი (სმ)': '56-60' },
+      { 'სიმაღლე (სმ)': '130-140 სმ', 'სპორტული კატეგორია': 'Junior 1 (იუნიორი)', 'გულმკერდი (სმ)': '66-72', 'წელი (სმ)': '60-64' },
+      { 'სიმაღლე (სმ)': '140-150 სმ', 'სპორტული კატეგორია': 'Junior 2 (იუნიორი)', 'გულმკერდი (სმ)': '72-78', 'წელი (სმ)': '64-68' },
+      { 'სიმაღლე (სმ)': '150-160 სმ', 'სპორტული კატეგორია': 'Youth (ახალგაზრდები)', 'გულმკერდი (სმ)': '78-84', 'წელი (სმ)': '68-72' },
+      { 'სიმაღლე (სმ)': '160-170 სმ', 'სპორტული კატეგორია': 'Adults (უფროსები)', 'გულმკერდი (სმ)': '84-92', 'წელი (სმ)': '72-78' },
+      { 'სიმაღლე (სმ)': '170-180 სმ', 'სპორტული კატეგორია': 'Adults L (უფროსები)', 'გულმკერდი (სმ)': '92-100', 'წელი (სმ)': '78-86' },
+      { 'სიმაღლე (სმ)': '180+ სმ', 'სპორტული კატეგორია': 'Adults XL (მაღალი)', 'გულმკერდი (სმ)': '100+', 'წელი (სმ)': '86+' },
     ]
   }
 ];
@@ -94,9 +104,9 @@ export const mockSizeCharts: SizeChart[] = [
 export const mockProducts: Product[] = [
   {
     id: 'prod-1',
-    name: 'Fiery Latin Rhythm Dress',
+    name: 'ლათინური პროფესიონალური კაბა "Fiery Rhythm"',
     slug: 'fiery-latin-rhythm-dress',
-    description: 'A premium, high-end Latin dance dress crafted from luxury stretch lace and flowing crepe. Fits perfectly and responds dynamically to every spin and step.',
+    description: 'პრემიუმ კლასის ლათინური საცეკვაო კაბა, დამზადებული იტალიური ელასტიური მაქმანისა და კრეპისგან. იდეალურად ერგება სხეულის მოძრაობას ყოველი ბრუნისას.',
     price: 450.00,
     sale_price: 399.99,
     brand: 'TDR DANCE',
@@ -110,17 +120,17 @@ export const mockProducts: Product[] = [
     status: 'active',
     rating: 4.9,
     variants: [
-      { id: 'v-1', product_id: 'prod-1', size: 'S', color: 'Midnight Black', stock: 5, price_modifier: 0 },
-      { id: 'v-2', product_id: 'prod-1', size: 'M', color: 'Midnight Black', stock: 12, price_modifier: 0 },
-      { id: 'v-3', product_id: 'prod-1', size: 'L', color: 'Midnight Black', stock: 3, price_modifier: 0 },
-      { id: 'v-4', product_id: 'prod-1', size: 'S', color: 'Crimson Red', stock: 4, price_modifier: 20.00 },
+      { id: 'v-1', product_id: 'prod-1', size: '140-150 სმ', color: 'შავი', stock: 5, price_modifier: 0 },
+      { id: 'v-2', product_id: 'prod-1', size: '150-160 სმ', color: 'შავი', stock: 12, price_modifier: 0 },
+      { id: 'v-3', product_id: 'prod-1', size: '160-170 სმ', color: 'შავი', stock: 8, price_modifier: 0 },
+      { id: 'v-4', product_id: 'prod-1', size: '170-180 სმ', color: 'წითელი', stock: 4, price_modifier: 20.00 },
     ]
   },
   {
     id: 'prod-2',
-    name: 'Gentlemen Latin Practice Shirt',
+    name: 'კაცის ლათინური სავარჯიშო პერანგი',
     slug: 'gentlemen-latin-practice-shirt',
-    description: 'Breathable, moisture-wicking stretch shirt designed specifically for intensive ballroom and Latin practice sessions.',
+    description: 'სუნთქვადი, ტენგამძლე ელასტიური პერანგი, შექმნილი სპეციალურად სამეჯლისო და ლათინური ცეკვების ინტენსიური ვარჯიშებისთვის.',
     price: 120.00,
     brand: 'Dancesport Pro',
     images: [
@@ -132,15 +142,16 @@ export const mockProducts: Product[] = [
     status: 'active',
     rating: 4.7,
     variants: [
-      { id: 'v-5', product_id: 'prod-2', size: 'M', color: 'Classic Black', stock: 8, price_modifier: 0 },
-      { id: 'v-6', product_id: 'prod-2', size: 'L', color: 'Classic Black', stock: 15, price_modifier: 0 },
+      { id: 'v-5', product_id: 'prod-2', size: '160-170 სმ', color: 'კლასიკური შავი', stock: 8, price_modifier: 0 },
+      { id: 'v-6', product_id: 'prod-2', size: '170-180 სმ', color: 'კლასიკური შავი', stock: 15, price_modifier: 0 },
+      { id: 'v-6b', product_id: 'prod-2', size: '180+ სმ', color: 'კლასიკური შავი', stock: 6, price_modifier: 0 },
     ]
   },
   {
     id: 'prod-3',
-    name: 'Elise Standard Dance Shoes',
+    name: 'ლათინური საცეკვაო ფეხსაცმელი "Elise Satin"',
     slug: 'elise-standard-dance-shoes',
-    description: 'Expertly handcrafted ballroom shoes with customized heel support and double cushioned insole for unmatched stability.',
+    description: 'ხელით დამზადებული პროფესიონალური საცეკვაო ფეხსაცმელი სპეციალური ქუსლის ბალანსით და ორმაგი რბილი შიდა ბალიშით.',
     price: 180.00,
     brand: 'Ray Rose',
     images: [
@@ -152,15 +163,38 @@ export const mockProducts: Product[] = [
     status: 'active',
     rating: 5.0,
     variants: [
-      { id: 'v-7', product_id: 'prod-3', size: '37', color: 'Flesh Satin', heel_height: '2.5\" Slim', stock: 6, price_modifier: 0 },
-      { id: 'v-8', product_id: 'prod-3', size: '38', color: 'Flesh Satin', heel_height: '2.5\" Slim', stock: 9, price_modifier: 0 },
-      { id: 'v-9', product_id: 'prod-3', size: '39', color: 'Flesh Satin', heel_height: '2.5\" Slim', stock: 2, price_modifier: 0 },
+      { id: 'v-7', product_id: 'prod-3', size: '36', color: 'ხორცისფერი ატლასი', heel_height: '6.5 სმ Slim', stock: 6, price_modifier: 0 },
+      { id: 'v-8', product_id: 'prod-3', size: '37', color: 'ხორცისფერი ატლასი', heel_height: '7.0 სმ Slim', stock: 9, price_modifier: 0 },
+      { id: 'v-9', product_id: 'prod-3', size: '38', color: 'ხორცისფერი ატლასი', heel_height: '7.5 სმ Slim', stock: 12, price_modifier: 0 },
+      { id: 'v-10', product_id: 'prod-3', size: '39', color: 'ხორცისფერი ატლასი', heel_height: '7.5 სმ Slim', stock: 5, price_modifier: 0 },
+      { id: 'v-11', product_id: 'prod-3', size: '40', color: 'ხორცისფერი ატლასი', heel_height: '7.5 სმ Slim', stock: 3, price_modifier: 0 },
+    ]
+  },
+  {
+    id: 'prod-4',
+    name: 'საბავშვო საცეკვაო ფეხსაცმელი "Juvenile Star"',
+    slug: 'juvenile-star-dance-shoes',
+    description: 'სპეციალურად ბავშვებისთვის (Juvenile) შექმნილი უსაფრთხო, დაბალქუსლიანი (3.5 სმ Block) საცეკვაო ფეხსაცმელი WDSF რეგლამენტის სრული დაცვით.',
+    price: 110.00,
+    brand: 'DanceShop Kids',
+    images: [
+      'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=600&auto=format&fit=crop'
+    ],
+    category_slug: 'kids',
+    category_id: 'cat-3',
+    size_chart_id: 'sc-shoes',
+    status: 'active',
+    rating: 4.8,
+    variants: [
+      { id: 'v-12', product_id: 'prod-4', size: '25', color: 'ოქროსფერი ატლასი', heel_height: '3.5 სმ Block', stock: 8, price_modifier: 0 },
+      { id: 'v-13', product_id: 'prod-4', size: '28', color: 'ოქროსფერი ატლასი', heel_height: '3.5 სმ Block', stock: 10, price_modifier: 0 },
+      { id: 'v-14', product_id: 'prod-4', size: '31', color: 'ოქროსფერი ატლასი', heel_height: '3.5 სმ Block', stock: 7, price_modifier: 0 },
+      { id: 'v-15', product_id: 'prod-4', size: '34', color: 'ოქროსფერი ატლასი', heel_height: '3.5 სმ Block', stock: 4, price_modifier: 0 },
     ]
   }
 ];
 
-// Memory stores for dynamic CRUD additions (simulates live update in session)
 export const activeCategoriesStore = [...mockCategories];
 export const activeProductsStore = [...mockProducts];
 export const activeSizeChartsStore = [...mockSizeCharts];
-export const wishlistStore: string[] = ['prod-1']; // initially has Prod 1
+export const wishlistStore: string[] = ['prod-1'];

@@ -13,6 +13,15 @@ interface PageProps {
   }>;
 }
 
+const categoryNameMap: Record<string, string> = {
+  women: 'ქალები',
+  men: 'კაცები',
+  kids: 'ბავშვები',
+  shoes: 'ფეხსაცმელი',
+  dancewear: 'ტანსაცმელი',
+  all: 'სრული კოლექცია',
+};
+
 export default function CategoryPage({ params }: PageProps) {
   const resolvedParams = use(params);
   const categorySegments = resolvedParams.category || [];
@@ -25,9 +34,10 @@ export default function CategoryPage({ params }: PageProps) {
   const [selectedSize, setSelectedSize] = useState<string>('all');
   const [maxPrice, setMaxPrice] = useState<number>(600);
 
-  const activeCategory = useMemo(() => {
-    if (activeCategorySlug === 'all') return null;
-    return mockCategories.find((c) => c.slug === activeCategorySlug);
+  const categoryDisplayName = useMemo(() => {
+    if (categoryNameMap[activeCategorySlug]) return categoryNameMap[activeCategorySlug];
+    const cat = mockCategories.find((c) => c.slug === activeCategorySlug);
+    return cat ? cat.name : 'სრული კოლექცია';
   }, [activeCategorySlug]);
 
   const filterOptions = useMemo(() => {
@@ -37,9 +47,18 @@ export default function CategoryPage({ params }: PageProps) {
       brands.add(p.brand);
       p.variants.forEach((v) => sizes.add(v.size));
     });
+
+    // Sort sizes logically: numeric sizes first, then height ranges
+    const sortedSizes = Array.from(sizes).sort((a, b) => {
+      const numA = parseInt(a);
+      const numB = parseInt(b);
+      if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+      return a.localeCompare(b);
+    });
+
     return {
       brands: Array.from(brands),
-      sizes: Array.from(sizes),
+      sizes: sortedSizes,
     };
   }, []);
 
@@ -70,10 +89,10 @@ export default function CategoryPage({ params }: PageProps) {
       <section className="bg-gradient-to-b from-amber-50/50 via-white to-white border-b border-border-color py-12 px-4 text-center">
         <div className="max-w-7xl mx-auto space-y-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight capitalize text-zinc-950">
-            {activeCategory ? activeCategory.name : 'სრული კოლექცია'}
+            {categoryDisplayName}
           </h1>
           <p className="text-zinc-500 text-xs uppercase tracking-widest font-bold">
-            მთავარი / პროდუქცია {activeCategory ? `/ ${activeCategory.name}` : ''}
+            მთავარი / პროდუქცია / {categoryDisplayName}
           </p>
         </div>
       </section>
@@ -132,7 +151,10 @@ export default function CategoryPage({ params }: PageProps) {
 
             {/* Size Filter */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">ზომა</h4>
+              <div className="flex justify-between items-center">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">ზომა</h4>
+                <span className="text-[10px] text-zinc-400 font-semibold">(სიმაღლე / EU)</span>
+              </div>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setSelectedSize('all')}
