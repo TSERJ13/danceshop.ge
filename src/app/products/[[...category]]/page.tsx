@@ -4,7 +4,7 @@ import { useState, useMemo, use } from 'react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { mockProducts, mockCategories } from '@/data/mockData';
-import { Filter, Star, Heart, SlidersHorizontal, ArrowRight, Grid, ShoppingBag } from 'lucide-react';
+import { Filter, Star, Heart, SlidersHorizontal, ArrowRight, Grid, ShoppingBag, Shirt, Footprints, Sparkles } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 interface PageProps {
@@ -19,6 +19,7 @@ const categoryNameMap: Record<string, string> = {
   kids: 'ბავშვები',
   shoes: 'ფეხსაცმელი',
   dancewear: 'ტანსაცმელი',
+  accessories: 'აქსესუარები',
   all: 'სრული კოლექცია',
 };
 
@@ -30,6 +31,8 @@ export default function CategoryPage({ params }: PageProps) {
   const { addToCart, wishlist, toggleWishlist } = useCart();
 
   // Filters State
+  const [productTypeFilter, setProductTypeFilter] = useState<'all' | 'clothing' | 'shoes' | 'accessories'>('all');
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>('all');
   const [selectedBrand, setSelectedBrand] = useState<string>('all');
   const [selectedSize, setSelectedSize] = useState<string>('all');
   const [maxPrice, setMaxPrice] = useState<number>(600);
@@ -40,15 +43,24 @@ export default function CategoryPage({ params }: PageProps) {
     return cat ? cat.name : 'სრული კოლექცია';
   }, [activeCategorySlug]);
 
+  // Available Subcategories for current main section
+  const availableSubcategories = useMemo(() => {
+    const mainCategoryObj = mockCategories.find((c) => c.slug === activeCategorySlug);
+    if (!mainCategoryObj) return [];
+    return mockCategories.filter((c) => c.parent_id === mainCategoryObj.id);
+  }, [activeCategorySlug]);
+
+  // Derived filter options based on type
   const filterOptions = useMemo(() => {
     const brands = new Set<string>();
     const sizes = new Set<string>();
+
     mockProducts.forEach((p) => {
+      if (productTypeFilter !== 'all' && p.product_type !== productTypeFilter) return;
       brands.add(p.brand);
       p.variants.forEach((v) => sizes.add(v.size));
     });
 
-    // Sort sizes logically: numeric sizes first, then height ranges
     const sortedSizes = Array.from(sizes).sort((a, b) => {
       const numA = parseInt(a);
       const numB = parseInt(b);
@@ -60,40 +72,151 @@ export default function CategoryPage({ params }: PageProps) {
       brands: Array.from(brands),
       sizes: sortedSizes,
     };
-  }, []);
+  }, [productTypeFilter]);
 
+  // Filtered Products List
   const filteredProducts = useMemo(() => {
     return mockProducts.filter((product) => {
-      const matchesCategory =
-        activeCategorySlug === 'all' ||
-        product.category_slug === activeCategorySlug ||
-        mockCategories.find((c) => c.slug === activeCategorySlug)?.id === product.category_id;
+      // Gender / Category match
+      let matchesCategory = true;
+      if (activeCategorySlug !== 'all') {
+        if (activeCategorySlug === 'women') matchesCategory = product.gender === 'women' || product.category_slug === 'women';
+        else if (activeCategorySlug === 'men') matchesCategory = product.gender === 'men' || product.category_slug === 'men';
+        else if (activeCategorySlug === 'kids') matchesCategory = product.gender === 'kids' || product.category_slug === 'kids';
+        else if (activeCategorySlug === 'shoes') matchesCategory = product.product_type === 'shoes';
+        else if (activeCategorySlug === 'dancewear') matchesCategory = product.product_type === 'clothing';
+        else if (activeCategorySlug === 'accessories') matchesCategory = product.product_type === 'accessories';
+        else matchesCategory = product.category_slug === activeCategorySlug;
+      }
 
+      // Product Type match (Clothing vs Shoes vs Accessories)
+      const matchesType = productTypeFilter === 'all' || product.product_type === productTypeFilter;
+
+      // Subcategory match
+      const matchesSubcategory =
+        selectedSubcategory === 'all' || product.subcategory_slug === selectedSubcategory;
+
+      // Brand match
       const matchesBrand = selectedBrand === 'all' || product.brand === selectedBrand;
       
+      // Size match
       const matchesSize =
-        selectedSize === 'all' ||
-        product.variants.some((v) => v.size === selectedSize);
+        selectedSize === 'all' || product.variants.some((v) => v.size === selectedSize);
 
+      // Price match
       const matchesPrice = product.price <= maxPrice;
 
-      return matchesCategory && matchesBrand && matchesSize && matchesPrice;
+      return matchesCategory && matchesType && matchesSubcategory && matchesBrand && matchesSize && matchesPrice;
     });
-  }, [activeCategorySlug, selectedBrand, selectedSize, maxPrice]);
+  }, [activeCategorySlug, productTypeFilter, selectedSubcategory, selectedBrand, selectedSize, maxPrice]);
 
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-white text-zinc-900">
       <Navigation />
 
       {/* Header Banner */}
-      <section className="bg-gradient-to-b from-amber-50/50 via-white to-white border-b border-border-color py-12 px-4 text-center">
-        <div className="max-w-7xl mx-auto space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight capitalize text-zinc-950">
-            {categoryDisplayName}
-          </h1>
-          <p className="text-zinc-500 text-xs uppercase tracking-widest font-bold">
-            მთავარი / პროდუქცია / {categoryDisplayName}
-          </p>
+      <section className="bg-gradient-to-b from-amber-50/50 via-white to-white border-b border-border-color py-10 px-4 text-center">
+        <div className="max-w-7xl mx-auto space-y-4">
+          <div className="space-y-1">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight capitalize text-zinc-950">
+              {categoryDisplayName}
+            </h1>
+            <p className="text-zinc-500 text-xs uppercase tracking-widest font-bold">
+              მთავარი / პროდუქცია / {categoryDisplayName}
+            </p>
+          </div>
+
+          {/* Product Type Filter Pills (Clothing vs Shoes vs Accessories) */}
+          <div className="inline-flex flex-wrap items-center justify-center gap-2 p-1.5 bg-zinc-100/80 rounded-2xl border border-zinc-200 shadow-2xs">
+            <button
+              onClick={() => {
+                setProductTypeFilter('all');
+                setSelectedSubcategory('all');
+                setSelectedSize('all');
+              }}
+              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all ${
+                productTypeFilter === 'all'
+                  ? 'bg-zinc-900 text-white shadow-xs'
+                  : 'text-zinc-650 hover:text-zinc-900'
+              }`}
+            >
+              ყველა პროდუქტი
+            </button>
+            <button
+              onClick={() => {
+                setProductTypeFilter('clothing');
+                setSelectedSubcategory('all');
+                setSelectedSize('all');
+              }}
+              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center space-x-1.5 ${
+                productTypeFilter === 'clothing'
+                  ? 'bg-gold-dark text-white shadow-xs'
+                  : 'text-zinc-650 hover:text-gold-dark'
+              }`}
+            >
+              <Shirt className="h-3.5 w-3.5" />
+              <span>ტანსაცმელი</span>
+            </button>
+            <button
+              onClick={() => {
+                setProductTypeFilter('shoes');
+                setSelectedSubcategory('all');
+                setSelectedSize('all');
+              }}
+              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center space-x-1.5 ${
+                productTypeFilter === 'shoes'
+                  ? 'bg-gold-dark text-white shadow-xs'
+                  : 'text-zinc-650 hover:text-gold-dark'
+              }`}
+            >
+              <Footprints className="h-3.5 w-3.5" />
+              <span>ფეხსაცმელი</span>
+            </button>
+            <button
+              onClick={() => {
+                setProductTypeFilter('accessories');
+                setSelectedSubcategory('all');
+                setSelectedSize('all');
+              }}
+              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center space-x-1.5 ${
+                productTypeFilter === 'accessories'
+                  ? 'bg-gold-dark text-white shadow-xs'
+                  : 'text-zinc-650 hover:text-gold-dark'
+              }`}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>აქსესუარები</span>
+            </button>
+          </div>
+
+          {/* Subcategory Pills Bar */}
+          {availableSubcategories.length > 0 && (
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              <button
+                onClick={() => setSelectedSubcategory('all')}
+                className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
+                  selectedSubcategory === 'all'
+                    ? 'border-gold bg-gold/10 text-gold-dark'
+                    : 'border-zinc-200 bg-white text-zinc-600 hover:border-gold/50'
+                }`}
+              >
+                ყველა ქვეკატეგორია
+              </button>
+              {availableSubcategories.map((sub) => (
+                <button
+                  key={sub.slug}
+                  onClick={() => setSelectedSubcategory(sub.slug)}
+                  className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
+                    selectedSubcategory === sub.slug
+                      ? 'border-gold bg-gold text-white shadow-2xs'
+                      : 'border-zinc-200 bg-white text-zinc-600 hover:border-gold/50'
+                  }`}
+                >
+                  {sub.name}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -110,6 +233,8 @@ export default function CategoryPage({ params }: PageProps) {
               </h3>
               <button
                 onClick={() => {
+                  setProductTypeFilter('all');
+                  setSelectedSubcategory('all');
                   setSelectedBrand('all');
                   setSelectedSize('all');
                   setMaxPrice(600);
@@ -149,11 +274,13 @@ export default function CategoryPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* Size Filter */}
+            {/* Context-aware Size Filter (Height cm vs EU shoe size) */}
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">ზომა</h4>
-                <span className="text-[10px] text-zinc-400 font-semibold">(სიმაღლე / EU)</span>
+                <span className="text-[10px] text-zinc-400 font-semibold">
+                  {productTypeFilter === 'shoes' ? '(EU ზომები 25-45)' : '(სიმაღლე სმ)'}
+                </span>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
@@ -190,7 +317,7 @@ export default function CategoryPage({ params }: PageProps) {
               </div>
               <input
                 type="range"
-                min="50"
+                min="40"
                 max="600"
                 step="10"
                 value={maxPrice}
@@ -238,8 +365,14 @@ export default function CategoryPage({ params }: PageProps) {
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors" />
+
+                        {/* Product Type Tag */}
+                        <span className="absolute top-4 left-4 bg-white/95 backdrop-blur-md text-zinc-900 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                          {product.product_type === 'shoes' ? '👠 ფეხსაცმელი' : product.product_type === 'clothing' ? '👗 ტანსაცმელი' : '✨ აქსესუარი'}
+                        </span>
+
                         {product.sale_price && (
-                          <span className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                          <span className="absolute top-12 left-4 bg-red-600 text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
                             ფასდაკლება
                           </span>
                         )}

@@ -50,6 +50,8 @@ export default function AdminProducts() {
       images: images ? images.split(',').map((img) => img.trim()) : ['https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=600&auto=format&fit=crop'],
       category_id: selectedCategory,
       category_slug: activeCategoriesStore.find((c) => c.id === selectedCategory)?.slug || 'all',
+      product_type: 'clothing',
+      gender: 'women',
       size_chart_id: selectedSizeChart || undefined,
       status: 'active',
       rating: 5.0,
