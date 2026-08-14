@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
-import { Star, ArrowRight, Heart, Sparkles, ShoppingBag, ShieldCheck, Truck, RotateCcw, CheckCircle2 } from 'lucide-react';
+import { Star, ArrowRight, Heart, Sparkles, ShoppingBag, ShieldCheck, Truck, RotateCcw, CheckCircle2, Box } from 'lucide-react';
 import { mockProducts } from '@/data/mockData';
 import { useCart } from '@/context/CartContext';
 
@@ -201,6 +201,8 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {mockProducts.map((product) => {
               const isSaved = wishlist.includes(product.id);
+              const totalStock = product.variants.reduce((sum, v) => sum + (v.stock || 0), 0);
+
               return (
                 <div
                   key={product.id}
@@ -220,6 +222,16 @@ export default function Home() {
                         ფასდაკლება
                       </span>
                     )}
+
+                    {/* Stock badge on image overlay */}
+                    <div className="absolute bottom-4 left-4">
+                      <span className={`inline-flex items-center space-x-1 text-[10px] font-extrabold px-3 py-1 rounded-full shadow-md backdrop-blur-md ${
+                        totalStock <= 5 ? 'bg-amber-500/90 text-white' : 'bg-emerald-600/90 text-white'
+                      }`}>
+                        <Box className="h-3 w-3" />
+                        <span>{totalStock <= 5 ? `🔥 დარჩენილია ${totalStock} ც` : `მარაგშია: ${totalStock} ც`}</span>
+                      </span>
+                    </div>
                   </Link>
 
                   {/* Wishlist Button Trigger */}

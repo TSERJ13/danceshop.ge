@@ -4,7 +4,7 @@ import { useState, useMemo, use } from 'react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { mockProducts, mockSizeCharts } from '@/data/mockData';
-import { Star, ShieldCheck, Heart, X, ArrowLeft, Ruler, ShoppingBag } from 'lucide-react';
+import { Star, ShieldCheck, Heart, X, ArrowLeft, Ruler, ShoppingBag, Box, Flame } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 interface ProductPageProps {
@@ -46,8 +46,10 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
         v.size === selectedSize &&
         v.color === selectedColor &&
         (!selectedHeel || v.heel_height === selectedHeel)
-    );
+    ) || product.variants[0];
   }, [product, selectedSize, selectedColor, selectedHeel]);
+
+  const variantStock = matchingVariant?.stock || 0;
 
   const finalPrice = useMemo(() => {
     const base = product.sale_price || product.price;
@@ -159,9 +161,16 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                   <span className="text-sm font-extrabold text-zinc-800">{product.rating.toFixed(1)}</span>
                 </div>
                 <span className="text-zinc-200">|</span>
-                <span className="text-xs uppercase tracking-wider text-green-600 font-extrabold">
-                  მარაგშია & მზადაა გასაგზავნად
-                </span>
+                
+                {/* Live Variant Stock Badge */}
+                <div className="flex items-center space-x-1.5">
+                  <Box className="h-4 w-4 text-emerald-600" />
+                  <span className={`text-xs font-extrabold uppercase tracking-wider ${
+                    variantStock <= 5 ? 'text-amber-600' : 'text-emerald-600'
+                  }`}>
+                    {variantStock <= 5 ? `🔥 დარჩენილია მხოლოდ ${variantStock} ცალი` : `მარაგშია ${variantStock} ცალი`}
+                  </span>
+                </div>
               </div>
             </div>
 

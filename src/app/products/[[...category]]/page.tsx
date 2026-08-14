@@ -4,7 +4,7 @@ import { useState, useMemo, use } from 'react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { mockProducts, mockCategories } from '@/data/mockData';
-import { Filter, Star, Heart, SlidersHorizontal, ArrowRight, Grid, ShoppingBag, Shirt, Footprints, Sparkles } from 'lucide-react';
+import { Filter, Star, Heart, SlidersHorizontal, ArrowRight, Grid, ShoppingBag, Shirt, Footprints, Sparkles, Box } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 interface PageProps {
@@ -386,6 +386,8 @@ export default function CategoryPage({ params }: PageProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 {filteredProducts.map((product) => {
                   const isSaved = wishlist.includes(product.id);
+                  const totalStock = product.variants.reduce((sum, v) => sum + (v.stock || 0), 0);
+
                   return (
                     <div
                       key={product.id}
@@ -412,6 +414,16 @@ export default function CategoryPage({ params }: PageProps) {
                             ფასდაკლება
                           </span>
                         )}
+
+                        {/* Inventory stock badge */}
+                        <div className="absolute bottom-4 left-4">
+                          <span className={`inline-flex items-center space-x-1 text-[10px] font-extrabold px-3 py-1 rounded-full shadow-md backdrop-blur-md ${
+                            totalStock <= 5 ? 'bg-amber-500/90 text-white' : 'bg-emerald-600/90 text-white'
+                          }`}>
+                            <Box className="h-3 w-3" />
+                            <span>{totalStock <= 5 ? `🔥 დარჩენილია ${totalStock} ც` : `მარაგშია: ${totalStock} ც`}</span>
+                          </span>
+                        </div>
                       </Link>
 
                       <button
