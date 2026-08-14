@@ -2,6 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import PWARegistration from "@/components/PWARegistration";
+import { CartProvider } from "@/context/CartContext";
+import CartDrawer from "@/components/CartDrawer";
+import Toast from "@/components/Toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DanceShop Georgia - Premium Ballroom & Latin Dancewear",
-  description: "Premium ballroom, Latin, and practice dancewear for ladies, gentlemen, and kids. Shop shoes, costumes, accessories, and more.",
+  title: "DanceShop Georgia - პრემიუმ საცეკვაო ტანსაცმელი და ფეხსაცმელი",
+  description: "სამეჯლისო, ლათინური და სავარჯიშო საცეკვაო ტანსაცმელი და ფეხსაცმელი ქალების, კაცებისა და ბავშვებისთვის.",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -33,7 +36,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -46,13 +49,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="ka" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <head>
         <link rel="manifest" href="/manifest.webmanifest" />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-yellow-500 selection:text-black">
-        <PWARegistration />
-        {children}
+        <CartProvider>
+          <PWARegistration />
+          {children}
+          <CartDrawer />
+          <Toast />
+        </CartProvider>
       </body>
     </html>
   );

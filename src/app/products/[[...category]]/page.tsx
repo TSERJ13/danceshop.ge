@@ -4,7 +4,8 @@ import { useState, useMemo, use } from 'react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import { mockProducts, mockCategories } from '@/data/mockData';
-import { Filter, Star, Heart, SlidersHorizontal, ArrowRight, Grid } from 'lucide-react';
+import { Filter, Star, Heart, SlidersHorizontal, ArrowRight, Grid, ShoppingBag } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
 interface PageProps {
   params: Promise<{
@@ -17,18 +18,18 @@ export default function CategoryPage({ params }: PageProps) {
   const categorySegments = resolvedParams.category || [];
   const activeCategorySlug = categorySegments[categorySegments.length - 1] || 'all';
 
+  const { addToCart, wishlist, toggleWishlist } = useCart();
+
   // Filters State
   const [selectedBrand, setSelectedBrand] = useState<string>('all');
   const [selectedSize, setSelectedSize] = useState<string>('all');
   const [maxPrice, setMaxPrice] = useState<number>(600);
-  const [wishlist, setWishlist] = useState<string[]>(['prod-1']);
 
   const activeCategory = useMemo(() => {
     if (activeCategorySlug === 'all') return null;
     return mockCategories.find((c) => c.slug === activeCategorySlug);
   }, [activeCategorySlug]);
 
-  // Derived filter options
   const filterOptions = useMemo(() => {
     const brands = new Set<string>();
     const sizes = new Set<string>();
@@ -42,7 +43,6 @@ export default function CategoryPage({ params }: PageProps) {
     };
   }, []);
 
-  // Filtered Products
   const filteredProducts = useMemo(() => {
     return mockProducts.filter((product) => {
       const matchesCategory =
@@ -62,23 +62,17 @@ export default function CategoryPage({ params }: PageProps) {
     });
   }, [activeCategorySlug, selectedBrand, selectedSize, maxPrice]);
 
-  const toggleWishlist = (id: string) => {
-    setWishlist((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
-
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-white text-zinc-900">
       <Navigation />
 
       {/* Header Banner */}
-      <section className="bg-zinc-50 border-b border-border-color py-12 px-4 text-center">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-wider capitalize text-zinc-950">
+      <section className="bg-gradient-to-b from-amber-50/50 via-white to-white border-b border-border-color py-12 px-4 text-center">
+        <div className="max-w-7xl mx-auto space-y-2">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight capitalize text-zinc-950">
             {activeCategory ? activeCategory.name : 'სრული კოლექცია'}
           </h1>
-          <p className="text-zinc-500 text-xs mt-2 uppercase tracking-widest font-semibold">
+          <p className="text-zinc-500 text-xs uppercase tracking-widest font-bold">
             მთავარი / პროდუქცია {activeCategory ? `/ ${activeCategory.name}` : ''}
           </p>
         </div>
@@ -91,8 +85,8 @@ export default function CategoryPage({ params }: PageProps) {
           {/* Sidebar Filters */}
           <aside className="space-y-8 lg:block">
             <div className="flex items-center justify-between border-b border-border-color pb-4">
-              <h3 className="font-bold text-base flex items-center space-x-2 text-zinc-900">
-                <SlidersHorizontal className="h-4.5 w-4.5 text-gold" />
+              <h3 className="font-extrabold text-base flex items-center space-x-2 text-zinc-900">
+                <SlidersHorizontal className="h-4.5 w-4.5 text-gold-dark" />
                 <span>ფილტრები</span>
               </h3>
               <button
@@ -101,7 +95,7 @@ export default function CategoryPage({ params }: PageProps) {
                   setSelectedSize('all');
                   setMaxPrice(600);
                 }}
-                className="text-xs text-gold font-bold hover:text-gold-light"
+                className="text-xs text-gold-dark font-extrabold hover:text-gold"
               >
                 გასუფთავება
               </button>
@@ -119,7 +113,7 @@ export default function CategoryPage({ params }: PageProps) {
                     onChange={() => setSelectedBrand('all')}
                     className="accent-gold h-4 w-4"
                   />
-                  <span>ყველა ბრენდი</span>
+                  <span className="font-medium">ყველა ბრენდი</span>
                 </label>
                 {filterOptions.brands.map((brand) => (
                   <label key={brand} className="flex items-center space-x-2 text-sm text-zinc-700 cursor-pointer">
@@ -130,7 +124,7 @@ export default function CategoryPage({ params }: PageProps) {
                       onChange={() => setSelectedBrand(brand)}
                       className="accent-gold h-4 w-4"
                     />
-                    <span>{brand}</span>
+                    <span className="font-medium">{brand}</span>
                   </label>
                 ))}
               </div>
@@ -142,9 +136,9 @@ export default function CategoryPage({ params }: PageProps) {
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setSelectedSize('all')}
-                  className={`px-3 py-1.5 text-xs rounded border transition-colors duration-200 ${
+                  className={`px-3 py-1.5 text-xs rounded-lg border font-bold transition-all ${
                     selectedSize === 'all'
-                      ? 'border-gold bg-gold text-white font-bold'
+                      ? 'border-gold bg-gold text-white shadow-xs'
                       : 'border-zinc-200 bg-white text-zinc-700 hover:border-gold/50'
                   }`}
                 >
@@ -154,9 +148,9 @@ export default function CategoryPage({ params }: PageProps) {
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`px-3 py-1.5 text-xs rounded border transition-colors duration-200 ${
+                    className={`px-3 py-1.5 text-xs rounded-lg border font-bold transition-all ${
                       selectedSize === size
-                        ? 'border-gold bg-gold text-white font-bold'
+                        ? 'border-gold bg-gold text-white shadow-xs'
                         : 'border-zinc-200 bg-white text-zinc-700 hover:border-gold/50'
                     }`}
                   >
@@ -168,9 +162,9 @@ export default function CategoryPage({ params }: PageProps) {
 
             {/* Price Filter */}
             <div className="space-y-3">
-              <div className="flex justify-between items-center text-xs font-bold text-zinc-400">
+              <div className="flex justify-between items-center text-xs font-bold text-zinc-500">
                 <span className="uppercase tracking-wider">მაქს. ფასი</span>
-                <span className="text-gold-dark font-extrabold">${maxPrice}</span>
+                <span className="text-gold-dark font-extrabold text-sm">${maxPrice}</span>
               </div>
               <input
                 type="range"
@@ -187,30 +181,30 @@ export default function CategoryPage({ params }: PageProps) {
           {/* Product Grid Area */}
           <div className="lg:col-span-3 space-y-6">
             <div className="flex items-center justify-between border-b border-border-color pb-4">
-              <p className="text-xs text-zinc-500 uppercase tracking-widest font-semibold">
+              <p className="text-xs text-zinc-500 uppercase tracking-widest font-extrabold">
                 ნაპოვნია {filteredProducts.length} პროდუქტი
               </p>
               <div className="flex items-center space-x-2">
-                <button className="p-2 border border-zinc-200 text-gold rounded" disabled>
+                <button className="p-2 border border-zinc-200 text-gold-dark rounded-lg" disabled>
                   <Grid className="h-4 w-4" />
                 </button>
               </div>
             </div>
 
             {filteredProducts.length === 0 ? (
-              <div className="text-center py-20 border border-dashed border-zinc-200 rounded bg-zinc-50">
+              <div className="text-center py-20 border border-dashed border-zinc-200 rounded-2xl bg-zinc-50">
                 <Filter className="h-12 w-12 text-zinc-400 mx-auto mb-4" />
-                <h3 className="font-bold text-lg text-zinc-900">პროდუქტები ვერ მოიძებნა</h3>
-                <p className="text-zinc-500 text-xs mt-1">შეცვალეთ ფილტრის პარამეტრები</p>
+                <h3 className="font-extrabold text-lg text-zinc-900">პროდუქტები ვერ მოიძებნა</h3>
+                <p className="text-zinc-500 text-xs mt-1 font-medium">შეცვალეთ ფილტრის პარამეტრები</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 {filteredProducts.map((product) => {
-                  const inWishlist = wishlist.includes(product.id);
+                  const isSaved = wishlist.includes(product.id);
                   return (
                     <div
                       key={product.id}
-                      className="group relative flex flex-col rounded border border-border-color bg-white overflow-hidden shadow-xs hover:shadow-md transition-shadow duration-300"
+                      className="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300"
                     >
                       <Link
                         href={`/product/${product.id}`}
@@ -221,9 +215,9 @@ export default function CategoryPage({ params }: PageProps) {
                           alt={product.name}
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
+                        <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors" />
                         {product.sale_price && (
-                          <span className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                          <span className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
                             ფასდაკლება
                           </span>
                         )}
@@ -231,32 +225,32 @@ export default function CategoryPage({ params }: PageProps) {
 
                       <button
                         onClick={() => toggleWishlist(product.id)}
-                        className="absolute top-4 right-4 p-2 rounded-full bg-white/90 border border-zinc-200 text-zinc-500 hover:text-gold transition-colors duration-200 shadow-sm"
+                        className="absolute top-4 right-4 p-2.5 rounded-full bg-white/90 border border-zinc-200 text-zinc-600 hover:text-red-500 transition-colors shadow-sm"
                       >
                         <Heart
-                          className={`h-4 w-4 ${inWishlist ? 'fill-gold text-gold' : ''}`}
+                          className={`h-4 w-4 ${isSaved ? 'fill-red-500 text-red-500' : ''}`}
                         />
                       </button>
 
                       <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                         <div>
-                          <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-1">
-                            <span className="font-bold uppercase tracking-wider">{product.brand}</span>
-                            <div className="flex items-center space-x-1 text-gold">
-                              <Star className="h-3.5 w-3.5 fill-gold" />
-                              <span className="font-bold">{product.rating.toFixed(1)}</span>
+                          <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-1 font-bold">
+                            <span className="uppercase tracking-wider text-gold-dark">{product.brand}</span>
+                            <div className="flex items-center space-x-1 text-amber-500">
+                              <Star className="h-3.5 w-3.5 fill-amber-400" />
+                              <span className="font-extrabold text-zinc-800">{product.rating.toFixed(1)}</span>
                             </div>
                           </div>
-                          <h3 className="text-base font-bold text-zinc-900 group-hover:text-gold transition-colors duration-200">
+                          <h3 className="text-base font-bold text-zinc-900 group-hover:text-gold-dark transition-colors">
                             <Link href={`/product/${product.id}`}>{product.name}</Link>
                           </h3>
                         </div>
 
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between pt-2 border-t border-zinc-100">
                           <div className="flex items-baseline space-x-2">
                             {product.sale_price ? (
                               <>
-                                <span className="text-lg font-bold text-gold-dark">
+                                <span className="text-xl font-extrabold text-zinc-950">
                                   ${product.sale_price.toFixed(2)}
                                 </span>
                                 <span className="text-xs text-zinc-400 line-through">
@@ -264,17 +258,19 @@ export default function CategoryPage({ params }: PageProps) {
                                 </span>
                               </>
                             ) : (
-                              <span className="text-lg font-bold text-zinc-950">
+                              <span className="text-xl font-extrabold text-zinc-950">
                                 ${product.price.toFixed(2)}
                               </span>
                             )}
                           </div>
-                          <Link
-                            href={`/product/${product.id}`}
-                            className="p-2 border border-gold/30 hover:border-gold hover:bg-gold hover:text-white rounded text-gold transition-all duration-300"
+                          
+                          <button
+                            onClick={() => addToCart(product)}
+                            className="px-4 py-2.5 bg-zinc-900 hover:bg-gold text-white font-bold text-xs rounded-xl transition-all duration-200 flex items-center space-x-1.5 shadow-sm active:scale-95"
                           >
-                            <ArrowRight className="h-4 w-4" />
-                          </Link>
+                            <ShoppingBag className="h-3.5 w-3.5" />
+                            <span>კალათაში</span>
+                          </button>
                         </div>
                       </div>
                     </div>
