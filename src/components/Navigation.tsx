@@ -44,8 +44,8 @@ export default function Navigation() {
       {/* Desktop Header */}
       <header className="sticky top-0 z-40 border-b border-border-color bg-white/95 backdrop-blur-md text-foreground shadow-2xs">
         {/* Top Announcement Bar */}
-        <div className="bg-zinc-900 text-white text-[9.5px] sm:text-[11px] py-1 px-2 text-center font-medium tracking-tight flex justify-center items-center space-x-1.5 whitespace-nowrap overflow-hidden">
-          <span className="bg-gold text-white px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-extrabold uppercase flex-shrink-0">
+        <div className="bg-zinc-900 text-white text-[9px] sm:text-[11px] py-1 sm:py-1.5 px-2 sm:px-4 text-center font-medium tracking-tight sm:tracking-wide flex justify-center items-center space-x-1.5 sm:space-x-2 whitespace-nowrap overflow-hidden">
+          <span className="bg-gold text-white px-1.5 sm:px-2 py-0.5 rounded text-[8px] sm:text-[9px] font-extrabold uppercase flex-shrink-0">
             უფასო მიწოდება
           </span>
           <span className="truncate">სწრაფი მიწოდება მთელი საქართველოს მასშტაბით! 🚚</span>
