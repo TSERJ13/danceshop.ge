@@ -119,27 +119,26 @@ export default function CategoryPage({ params }: PageProps) {
     <div className="flex-1 flex flex-col min-h-screen bg-white text-zinc-900">
       <Navigation />
 
-      {/* Header Banner */}
-      <section className="bg-gradient-to-b from-amber-50/50 via-white to-white border-b border-border-color py-10 px-4 text-center">
-        <div className="max-w-7xl mx-auto space-y-4">
-          <div className="space-y-1">
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight capitalize text-zinc-950">
-              {categoryDisplayName}
-            </h1>
-            <p className="text-zinc-500 text-xs uppercase tracking-widest font-bold">
-              მთავარი / პროდუქცია / {categoryDisplayName}
-            </p>
+      {/* Compact Modern Catalog Header */}
+      <section className="bg-white border-b border-border-color py-4 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          
+          {/* Sleek Breadcrumb */}
+          <div className="flex items-center space-x-2 text-xs font-semibold text-zinc-500">
+            <Link href="/" className="hover:text-gold-dark transition-colors">მთავარი</Link>
+            <span>/</span>
+            <span className="text-zinc-900 font-extrabold">{categoryDisplayName}</span>
           </div>
 
           {/* Product Type Filter Pills (Clothing vs Shoes vs Accessories) */}
-          <div className="inline-flex flex-wrap items-center justify-center gap-2 p-1.5 bg-zinc-100/80 rounded-2xl border border-zinc-200 shadow-2xs">
+          <div className="inline-flex flex-wrap items-center justify-center gap-1.5 p-1 bg-zinc-100/90 rounded-xl border border-zinc-200">
             <button
               onClick={() => {
                 setProductTypeFilter('all');
                 setSelectedSubcategory('all');
                 setSelectedSize('all');
               }}
-              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all ${
+              className={`px-3.5 py-1.5 text-xs font-extrabold rounded-lg transition-all ${
                 productTypeFilter === 'all'
                   ? 'bg-zinc-900 text-white shadow-xs'
                   : 'text-zinc-650 hover:text-zinc-900'
@@ -153,7 +152,7 @@ export default function CategoryPage({ params }: PageProps) {
                 setSelectedSubcategory('all');
                 setSelectedSize('all');
               }}
-              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center space-x-1.5 ${
+              className={`px-3.5 py-1.5 text-xs font-extrabold rounded-lg transition-all flex items-center space-x-1.5 ${
                 productTypeFilter === 'clothing'
                   ? 'bg-gold-dark text-white shadow-xs'
                   : 'text-zinc-650 hover:text-gold-dark'
@@ -168,7 +167,7 @@ export default function CategoryPage({ params }: PageProps) {
                 setSelectedSubcategory('all');
                 setSelectedSize('all');
               }}
-              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center space-x-1.5 ${
+              className={`px-3.5 py-1.5 text-xs font-extrabold rounded-lg transition-all flex items-center space-x-1.5 ${
                 productTypeFilter === 'shoes'
                   ? 'bg-gold-dark text-white shadow-xs'
                   : 'text-zinc-650 hover:text-gold-dark'
@@ -183,7 +182,7 @@ export default function CategoryPage({ params }: PageProps) {
                 setSelectedSubcategory('all');
                 setSelectedSize('all');
               }}
-              className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all flex items-center space-x-1.5 ${
+              className={`px-3.5 py-1.5 text-xs font-extrabold rounded-lg transition-all flex items-center space-x-1.5 ${
                 productTypeFilter === 'accessories'
                   ? 'bg-gold-dark text-white shadow-xs'
                   : 'text-zinc-650 hover:text-gold-dark'
@@ -193,36 +192,36 @@ export default function CategoryPage({ params }: PageProps) {
               <span>აქსესუარები</span>
             </button>
           </div>
+        </div>
 
-          {/* Subcategory Pills Bar */}
-          {availableSubcategories.length > 0 && (
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+        {/* Subcategory Pills Bar */}
+        {availableSubcategories.length > 0 && (
+          <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center md:justify-start gap-2 pt-3 mt-3 border-t border-zinc-100">
+            <button
+              onClick={() => setSelectedSubcategory('all')}
+              className={`px-3 py-1 text-xs font-bold rounded-lg border transition-all ${
+                selectedSubcategory === 'all'
+                  ? 'border-gold bg-gold/10 text-gold-dark'
+                  : 'border-zinc-200 bg-white text-zinc-600 hover:border-gold/50'
+              }`}
+            >
+              ყველა ქვეკატეგორია
+            </button>
+            {availableSubcategories.map((sub) => (
               <button
-                onClick={() => setSelectedSubcategory('all')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
-                  selectedSubcategory === 'all'
-                    ? 'border-gold bg-gold/10 text-gold-dark'
+                key={sub.slug}
+                onClick={() => setSelectedSubcategory(sub.slug)}
+                className={`px-3 py-1 text-xs font-bold rounded-lg border transition-all ${
+                  selectedSubcategory === sub.slug
+                    ? 'border-gold bg-gold text-white shadow-2xs'
                     : 'border-zinc-200 bg-white text-zinc-600 hover:border-gold/50'
                 }`}
               >
-                ყველა ქვეკატეგორია
+                {sub.name}
               </button>
-              {availableSubcategories.map((sub) => (
-                <button
-                  key={sub.slug}
-                  onClick={() => setSelectedSubcategory(sub.slug)}
-                  className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
-                    selectedSubcategory === sub.slug
-                      ? 'border-gold bg-gold text-white shadow-2xs'
-                      : 'border-zinc-200 bg-white text-zinc-600 hover:border-gold/50'
-                  }`}
-                >
-                  {sub.name}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Main Catalog Section */}
