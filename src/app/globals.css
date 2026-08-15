@@ -43,6 +43,11 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
+/* PWA Mobile Safe Area Utilities for gesture bar lifting */
+.pwa-bottom-bar {
+  padding-bottom: max(1.25rem, calc(0.75rem + env(safe-area-inset-bottom)));
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

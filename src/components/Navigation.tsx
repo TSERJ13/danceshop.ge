@@ -202,7 +202,7 @@ export default function Navigation() {
       )}
 
       {/* Mobile Bottom Navigation Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 md:hidden border-t border-border-color bg-white/95 px-4 py-2 backdrop-blur-md shadow-2xl">
+      <div className="fixed bottom-0 left-0 right-0 z-30 md:hidden border-t border-border-color bg-white/95 px-4 pt-3 pwa-bottom-bar backdrop-blur-md shadow-2xl">
         <nav className="flex justify-around items-center">
           {mobileBottomNav.map((item) => {
             const Icon = item.icon;
